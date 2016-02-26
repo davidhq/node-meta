@@ -2,30 +2,23 @@
 var colors = require('colors')
 var fs = require('fs')
 var util = require('utilities').util
+
 var Projects = require('./projects')
+var projects = new Projects()
 
 let args = process.argv.slice(2)
 let dep = args[0]
 
-function hasDep(project, dep) {
-  if(project.dependencies) {
-    let deps = Object.keys(project.dependencies)
-    return !!deps.find(d => d.toLowerCase().indexOf(dep.toLowerCase()) > -1)
-  }
-}
-
 function showProject(project, dep) {
-  if((dep && hasDep(project, dep)) || !dep) {
-    let path = process.cwd()
+  if((dep && projects.hasDep(project, dep)) || !dep) {
 
     console.log(colors.cyan(`<${project.name}>`))
 
     if (project.dependencies) {
-      let deps = Object.keys(project.dependencies)
-      console.log(`${colors.yellow(deps.join(', '))}`)
+      console.log(`${colors.yellow(projects.depList(project).join(', '))}`)
 
       if(dep) {
-        for(let match of deps.filter(d => d.toLowerCase().indexOf(dep.toLowerCase()) > -1)) {
+        for(let match of projects.findDeps(project, dep)) {
           console.log(colors.green(`https://www.npmjs.com/package/${match}`))
         }
       }
@@ -50,15 +43,13 @@ function showProject(project, dep) {
   }
 }
 
-let project = new Projects().info(process.cwd())
+let path = process.cwd()
+let project = projects.info(path)
 
 if(project) {
   showProject(project, dep)
 } else {
-  let projects = new Projects().scan(process.cwd())
-  if(projects.length) {
-    for(let project of projects) {
-      showProject(project, dep)
-    }
+  for(let project of projects.scan(path)) {
+    showProject(project, dep)
   }
 }
