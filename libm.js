@@ -6,20 +6,17 @@ var util = require('utilities').util
 var Projects = require('./projects')
 var projects = new Projects()
 
+function nameEmail(name, email) {
+  return email ? `${name} <${email}>` : name
+}
+
 let args = process.argv.slice(2)
 let filter = args[0]
 
 let path = process.cwd()
 let project = projects.info(path)
 
-function nameEmail(name, email) {
-  return email ? `${name} <${email}>` : name
-}
-
-let deps = project ?
-  projects.depsWithInfo(project) :
-  // get all unique dependencies across all projects
-  projects.scan(path).reduce((deps, project) => deps.concat(projects.depsWithInfo(project).filter(dep => !deps.find(dep2 => dep.name == dep2.name))), [])
+let deps = project ? projects.depsWithInfo(project) : projects.depsWithInfoPath(path)
 
 for(let dep of util.arraySortByKey(deps, 'name')) {
   if(!filter || (filter && dep.name.toLowerCase().indexOf(filter.toLowerCase())) > -1) {

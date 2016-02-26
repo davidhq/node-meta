@@ -1,0 +1,14 @@
+{
+  "ethereum": {
+    "main": "https://github.com/ethereum/wiki/wiki",
+    "js": "https://github.com/ethereum/wiki/wiki/JavaScript-API",
+    "rpc": "https://github.com/ethereum/wiki/wiki/JSON-RPC",
+    "geth": "https://github.com/ethereum/go-ethereum/wiki",
+    "cpp": "https://github.com/ethereum/webthree-umbrella/wiki",
+    "contract": "https://github.com/ethereum/wiki/wiki/Standardized_Contract_APIs",
+    "abi": "https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI",
+    "sol": "https://solidity.readthedocs.org/en/latest/",
+    "sol2": "https://github.com/ethereum/wiki/wiki/Solidity-Features",
+    "whisper": "https://github.com/ethereum/wiki/wiki/Whisper-Overview"
+  }
+}

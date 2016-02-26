@@ -43,19 +43,40 @@ class Projects {
     return util.listSearch(this.depList(project), term)
   }
 
-  depsWithInfo(project, callback) {
+  depsWithInfo(project) {
     return this.depList(project).map(dep => {
-      let pkg = JSON.parse(fs.readFileSync(`${project.path}/node_modules/${dep}/package.json`))
-      let repo = github.repoName(pkg['repository']['url'])
-      return {
-        name: pkg.name,
-        description: pkg.description,
-        github: `https://github.com/${repo}`,
-        homepage: pkg.homepage,
-        author: pkg.author, // email, name, url
-        npmuser: pkg._npmUser // email, name, url
+      let pkgFile = `${project.path}/node_modules/${dep}/package.json`
+      if(util.fileExists(pkgFile)) {
+        let pkg = JSON.parse(fs.readFileSync(pkgFile))
+        let repo = github.repoName(pkg['repository']['url'])
+        return {
+          name: pkg.name,
+          description: pkg.description,
+          github: `https://github.com/${repo}`,
+          homepage: pkg.homepage,
+          author: pkg.author, // email, name, url
+          npmuser: pkg._npmUser // email, name, url
+        }
+      } else {
+        return {
+          missing: true,
+          name: dep,
+          description: "<missing>",
+          github: "<missing>",
+          homepage: "<missing>"
+        }
       }
     })
+  }
+
+  // get all unique dependencies across all projects
+  // if some project doesn't have node_modules currently but another one has, then dependency info is still gathered from where it can be
+  // each dependency has to be present only once across all scanned projects
+  depsWithInfoPath(path) {
+    return this.scan(path).reduce((deps, project) => deps.concat(this.depsWithInfo(project).filter(dep => {
+      let match = deps.find(d => d.name == dep.name)
+      return !match || match.missing
+    })), []).filter(dep => !dep.missing)
   }
 
   depInfo(dep, callback) {
