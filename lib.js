@@ -12,7 +12,12 @@ let dep = args[0]
 function showProject(project, dep) {
   if((dep && projects.hasDep(project, dep)) || !dep) {
 
-    console.log(colors.cyan(`<${project.name}>`))
+    let dir = ''
+    if(project.name != project.folder) {
+      dir = ` (directory: ${project.folder})`
+    }
+
+    console.log(colors.cyan(`<${project.name}>`) + dir)
 
     if (project.dependencies) {
       console.log(`${colors.yellow(projects.depList(project).join(', '))}`)

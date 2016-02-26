@@ -1,5 +1,6 @@
 "use strict"
 var fs = require('fs')
+var pth = require('path')
 var util = require('utilities').util
 
 var GitHub = require("./providers/github")
@@ -23,6 +24,7 @@ class Projects {
 
       return {
         name: pkg.name,
+        folder: pth.basename(path),
         path: path,
         dependencies: pkg.dependencies
       }
