@@ -64,7 +64,7 @@ switch(platform) {
 
   default:
     if(term) {
-      let match =findShortestMatch(docs[platform], term)
+      let match = findShortestMatch(docs[platform], term)
 
       if(match) {
         let urls = docs[platform][match]

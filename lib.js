@@ -44,7 +44,7 @@ function showProject(project, dep) {
       })
     }
 
-    console.log("")
+    console.log()
   }
 }
 
