@@ -15,8 +15,8 @@ class NpmJs {
       callback({
         name: pkg,
         description: obj.description,
-        github_url: github_url,
-        github_repo: github_url.replace('https://github.com/', '')
+        github: github_url,
+        github_repo: github_url && github_url.replace('https://github.com/', '')
       })
     })
   }

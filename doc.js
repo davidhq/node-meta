@@ -1,6 +1,9 @@
 "use strict"
 var open = require('open')
-let docs = require('utilities').config.load('./doc.json')
+var fs = require('fs')
+let util = require('utilities').util
+let docs = require('utilities').config.load(__dirname + '/doc.json')
+var colors = require('colors')
 
 let args = process.argv.slice(2)
 
@@ -8,36 +11,80 @@ let platform = args[0]
 let term = args[1]
 let url = ''
 
-if(platform == 'node') {
-  url = "https://nodejs.org/api"
-  if(term) url = `${url}/${term}.html`
-}
-
-if(platform == 'eth') {
-  url = term ? docs.ethereum[term] : docs.ethereum['main']
-}
-
-if(platform == 'npm' && term) {
-  var Projects = require('./projects')
-  var projects = new Projects()
-
-  let path = process.cwd()
-  let project = projects.info(path)
-
-  let deps = project ? projects.depsWithInfo(project) : projects.depsWithInfoPath(path)
-
-  let dep = deps.find(dep => dep.name == term)
-
-  if(dep) {
-    open(dep.github)
-  } else {
-    var NpmJs = require("./providers/npmjs")
-    let npmjs = new NpmJs()
-
-    npmjs.info(term, function(info) {
-      open(info.github_url)
-    })
+function listDocs(data) {
+  for(let name in data) {
+    let url = data[name]
+    if(Array.isArray(data[name])) {
+      url = data[name].join(', ')
+    }
+    console.log(colors.yellow(name) + ` ${url}`)
   }
+}
+
+function findShortestMatch(data, term) {
+  let matches = Object.keys(data).filter(name => util.cointainsStringInsensitive(name, term))
+  if(matches) {
+    return matches.sort((a, b) => a.length - b.length)[0]
+  }
+}
+
+switch(platform) {
+
+  case 'node':
+    url = "https://nodejs.org/api"
+    if(term) {
+      url = `${url}/${term}.html`
+    }
+    break
+
+  case 'npm':
+    if(term) {
+      var Projects = require('./projects')
+      var projects = new Projects()
+
+      let path = process.cwd()
+      let project = projects.info(path)
+
+      let deps = project ? projects.depsWithInfo(project) : projects.depsWithInfoPath(path)
+
+      let dep = deps.find(dep => dep.name == term)
+
+      if(dep) {
+        open(dep.github)
+      } else {
+        var NpmJs = require("./providers/npmjs")
+        let npmjs = new NpmJs()
+
+        npmjs.info(term, function(info) {
+          open(info.github_url)
+        })
+      }
+    }
+    break
+
+  default:
+    if(term) {
+      let match =findShortestMatch(docs[platform], term)
+
+      if(match) {
+        let urls = docs[platform][match]
+
+        if(Array.isArray(urls)) { // multiple urls
+          for(let u of urls) {
+            console.log(colors.yellow(u))
+          }
+        } else {
+          url = urls
+        }
+      }
+    } else {
+      if(util.isString(docs[platform])) {
+        url = docs[platform]
+      } else {
+        listDocs(docs[platform])
+      }
+    }
+
 }
 
 if(url) open(url)
