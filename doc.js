@@ -22,9 +22,34 @@ function listDocs(data) {
 }
 
 function findShortestMatch(data, term) {
-  let matches = Object.keys(data).filter(name => util.cointainsStringInsensitive(name, term))
-  if(matches) {
-    return matches.sort((a, b) => a.length - b.length)[0]
+  if(data && term) {
+    let matches = Object.keys(data).filter(name => util.cointainsStringInsensitive(name, term))
+    if(matches) {
+      return matches.sort((a, b) => a.length - b.length)[0]
+    }
+  }
+}
+
+function handleNpm(term) {
+  var Projects = require('./projects')
+  var projects = new Projects()
+
+  let path = process.cwd()
+  let project = projects.info(path)
+
+  let deps = project ? projects.depsWithInfo(project) : projects.depsWithInfoPath(path)
+
+  let dep = deps.find(dep => dep.name == term)
+
+  if(dep) {
+    open(dep.github)
+  } else {
+    var NpmJs = require("./providers/npmjs")
+    let npmjs = new NpmJs()
+
+    npmjs.info(term, function(info) {
+      open(info.github)
+    })
   }
 }
 
@@ -39,49 +64,38 @@ switch(platform) {
 
   case 'npm':
     if(term) {
-      var Projects = require('./projects')
-      var projects = new Projects()
-
-      let path = process.cwd()
-      let project = projects.info(path)
-
-      let deps = project ? projects.depsWithInfo(project) : projects.depsWithInfoPath(path)
-
-      let dep = deps.find(dep => dep.name == term)
-
-      if(dep) {
-        open(dep.github)
-      } else {
-        var NpmJs = require("./providers/npmjs")
-        let npmjs = new NpmJs()
-
-        npmjs.info(term, function(info) {
-          open(info.github_url)
-        })
-      }
+      handleNpm(term)
     }
     break
 
   default:
     if(term) {
-      let match = findShortestMatch(docs[platform], term)
+      if(docs[platform]) {
+        let match = findShortestMatch(docs[platform], term)
 
-      if(match) {
-        let urls = docs[platform][match]
+        if(match) {
+          let urls = docs[platform][match]
 
-        if(Array.isArray(urls)) { // multiple urls
-          for(let u of urls) {
-            console.log(colors.yellow(u))
+          if(Array.isArray(urls)) { // multiple urls
+            for(let u of urls) {
+              console.log(colors.yellow(u))
+            }
+          } else {
+            url = urls
           }
-        } else {
-          url = urls
         }
+      } else {
+        //console.log(platform)
+        //handleNpm(platform)
+        console.log(colors.red(`No key "${platform}" in docs.json`))
       }
     } else {
       if(util.isString(docs[platform])) {
         url = docs[platform]
-      } else {
+      } else if(docs[platform]) {
         listDocs(docs[platform])
+      } else {
+        handleNpm(platform)
       }
     }
 

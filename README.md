@@ -14,6 +14,6 @@
     alias libm="node ~/Projects/node-meta/libm.js"
     alias doc="node ~/Projects/node-meta/doc.js"
 
-- go to any npm repo (or directory with many repos) and run `lib` or `libm`
+- go to any npm repo (or _directory with many repos_) and run `lib` or `libm`
 - to filter dependencies by search term: `lib term` / `libm term`
-- try `doc node fs` / `doc eth js` / `doc npm superagent` / `doc api nasa` (see `doc.json`)
+- try `doc node fs` / `doc eth js` / `doc npm superagent` (or just `doc superagent`) / `doc api nasa` (see `doc.json`)
