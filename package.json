@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "colors": "^1.1.2",
+    "davidhq-util": "^1.0.0",
     "open": "0.0.5",
     "superagent": "^1.8.0-beta.1",
     "x-ray": "^2.0.3"

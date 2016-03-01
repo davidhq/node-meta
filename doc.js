@@ -1,8 +1,8 @@
 "use strict"
 var open = require('open')
 var fs = require('fs')
-let util = require('utilities').util
-let docs = require('utilities').config.load(__dirname + '/doc.json')
+let util = require('davidhq-util').util
+let docs = require('davidhq-util').config.load(__dirname + '/doc.json')
 var colors = require('colors')
 
 let args = process.argv.slice(2)

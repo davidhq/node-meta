@@ -1,7 +1,7 @@
 "use strict"
 var fs = require('fs')
 var pth = require('path')
-var util = require('utilities').util
+var util = require('davidhq-util').util
 
 var GitHub = require("./providers/github")
 let github = new GitHub()
@@ -48,15 +48,23 @@ class Projects {
       let pkgFile = `${project.path}/node_modules/${dep}/package.json`
       if(util.fileExists(pkgFile)) {
         let pkg = JSON.parse(fs.readFileSync(pkgFile))
-        let repo = github.repoName(pkg['repository']['url'])
-        return {
+
+        let obj = {
           name: pkg.name,
           description: pkg.description,
-          github: `https://github.com/${repo}`,
           homepage: pkg.homepage,
           author: pkg.author, // email, name, url
           npmuser: pkg._npmUser // email, name, url
         }
+
+        if(pkg['repository']) {
+          let repo = github.repoName(pkg['repository']['url'])
+          obj.github = `https://github.com/${repo}`
+        } else {
+          obj.github = "<missing>"
+        }
+
+        return obj
       } else {
         return {
           missing: true,

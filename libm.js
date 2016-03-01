@@ -1,7 +1,7 @@
 "use strict"
 var colors = require('colors')
 var fs = require('fs')
-var util = require('utilities').util
+var util = require('davidhq-util').util
 
 var NpmJs = require("./providers/npmjs")
 let npmjs = new NpmJs()

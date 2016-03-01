@@ -1,14 +1,7 @@
     cd Projects
-    git clone git@github.com:davidhq/node-util.git
-    cd node-util
-    npm install
-    npm link
-
-    cd Projects
     git clone git@github.com:davidhq/node-meta.git
     cd node-meta
     npm install
-    npm link utilities
 
     alias lib="node ~/Projects/node-meta/lib.js"
     alias libm="node ~/Projects/node-meta/libm.js"

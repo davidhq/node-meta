@@ -1,5 +1,5 @@
 "use strict"
-var util = require('utilities').util
+var util = require('davidhq-util').util
 var Xray = require('x-ray')
 var x = Xray()
 
