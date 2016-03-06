@@ -20,7 +20,7 @@ function showProject(project, dep) {
     console.log(colors.cyan(`<${project.name}>`) + dir)
 
     if (project.dependencies) {
-      console.log(`${colors.yellow(projects.depList(project).join(', '))}`)
+      console.log(`Deps: ${colors.yellow(projects.depList(project).join(', '))}`)
 
       if(dep) {
         for(let match of projects.findDeps(project, dep)) {
@@ -53,6 +53,7 @@ let project = projects.info(path)
 
 if(project) {
   showProject(project, dep)
+  projects.showDep(projects.projectDepInfoFormat(project.path))
 } else {
   for(let project of projects.scan(path)) {
     showProject(project, dep)

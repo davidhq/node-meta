@@ -2,6 +2,7 @@
 var fs = require('fs')
 var pth = require('path')
 var util = require('davidhq-util').util
+var colors = require('colors')
 
 var GitHub = require("./providers/github")
 let github = new GitHub()
@@ -45,40 +46,48 @@ class Projects {
     return util.listSearch(this.depList(project), term)
   }
 
+  projectDepInfoFormat(projectPath, dep) {
+    let pkgFile = `${projectPath}/package.json`
+    if(util.fileExists(pkgFile)) {
+      let pkg = JSON.parse(fs.readFileSync(pkgFile))
+
+      let obj = {
+        name: pkg.name,
+        version: pkg.version,
+        description: pkg.description,
+        homepage: pkg.homepage,
+        author: pkg.author, // email, name, url
+        npmuser: pkg._npmUser // email, name, url
+      }
+
+      if(pkg['repository']) {
+        let repo = github.repoName(pkg['repository']['url'])
+        obj.github = `https://github.com/${repo}`
+      } else {
+        obj.github = "<missing>"
+      }
+
+      return obj
+    } else {
+      return {
+        missing: true,
+        name: dep,
+        description: "<missing>",
+        github: "<missing>",
+        homepage: "<missing>"
+      }
+    }
+  }
+
+  depInfo(projectPath, dep) {
+    return this.projectDepInfoFormat(`${projectPath}/node_modules/${dep}`, dep)
+  }
+
   // scans all the dependencies for the project and reads the package.json of each one
   depsWithInfo(project) {
-    return this.depList(project).map(dep => {
-      let pkgFile = `${project.path}/node_modules/${dep}/package.json`
-      if(util.fileExists(pkgFile)) {
-        let pkg = JSON.parse(fs.readFileSync(pkgFile))
-
-        let obj = {
-          name: pkg.name,
-          version: pkg.version,
-          description: pkg.description,
-          homepage: pkg.homepage,
-          author: pkg.author, // email, name, url
-          npmuser: pkg._npmUser // email, name, url
-        }
-
-        if(pkg['repository']) {
-          let repo = github.repoName(pkg['repository']['url'])
-          obj.github = `https://github.com/${repo}`
-        } else {
-          obj.github = "<missing>"
-        }
-
-        return obj
-      } else {
-        return {
-          missing: true,
-          name: dep,
-          description: "<missing>",
-          github: "<missing>",
-          homepage: "<missing>"
-        }
-      }
-    })
+    return this.depList(project).map(function(dep) {
+      return this.depInfo(project.path, dep)
+    }, this)
   }
 
   // get all unique dependencies across all projects
@@ -91,13 +100,23 @@ class Projects {
     })), []).filter(dep => !dep.missing)
   }
 
-  depInfo(dep, callback) {
-    npmjs.info(dep, (info) => {
-      github.repoInfo('visionmedia/superagent', (repo) => {
-        info.homepage = repo.homepage
-        callback(info)
-      })
-    })
+  // depInfo(dep, callback) {
+  //   npmjs.info(dep, (info) => {
+  //     github.repoInfo('visionmedia/superagent', (repo) => {
+  //       info.homepage = repo.homepage
+  //       callback(info)
+  //     })
+  //   })
+  // }
+
+  showDep(dep) {
+    console.log(colors.yellow(`${dep.name} >>> `) + colors.green(dep.description))
+    if(dep.github) { console.log('GitHub: ' + colors.cyan(dep.github)) }
+    if(dep.homepage) { console.log('Homepage: ' + colors.cyan(dep.homepage)) }
+    console.log('Version: ' + colors.green(dep.version))
+    //if(dep.author) console.log('Author: ' + nameEmail(dep.author.name, dep.author.email))
+    //console.log('Npm User: ' + nameEmail(dep.npmuser.name, dep.npmuser.email))
+    console.log()
   }
 }
 
