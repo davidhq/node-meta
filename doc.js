@@ -90,12 +90,16 @@ switch(platform) {
         console.log(colors.red(`No key "${platform}" in docs.json`))
       }
     } else {
-      if(util.isString(docs[platform])) {
-        url = docs[platform]
-      } else if(docs[platform]) {
-        listDocs(docs[platform])
+      if(platform) {
+        if(util.isString(docs[platform])) {
+          url = docs[platform]
+        } else if(docs[platform]) {
+          listDocs(docs[platform])
+        } else {
+          handleNpm(platform)
+        }
       } else {
-        handleNpm(platform)
+        console.log("Usage: doc key term")
       }
     }
 

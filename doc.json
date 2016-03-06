@@ -17,6 +17,8 @@
 
   "express": "http://expressjs.com/",
   "superagent": "http://visionmedia.github.io/superagent/",
+  "sublime": "http://docs.sublimetext.info/en/latest/",
+  "jq": "https://stedolan.github.io/jq/manual/",
 
   "gitter": {
     "eth_light": "https://gitter.im/ethereum/light-client"
