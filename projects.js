@@ -18,6 +18,7 @@ class Projects {
     return util.fileExists(`${path}/package.json`)
   }
 
+  // returns the info for one project
   info(path) {
     if (this.valid(path)) {
       let pkg = JSON.parse(fs.readFileSync(`${path}/package.json`))
@@ -25,6 +26,7 @@ class Projects {
       return {
         name: pkg.name,
         folder: pth.basename(path),
+        version: pkg.version,
         path: path,
         dependencies: pkg.dependencies
       }
@@ -43,6 +45,7 @@ class Projects {
     return util.listSearch(this.depList(project), term)
   }
 
+  // scans all the dependencies for the project and reads the package.json of each one
   depsWithInfo(project) {
     return this.depList(project).map(dep => {
       let pkgFile = `${project.path}/node_modules/${dep}/package.json`
@@ -51,6 +54,7 @@ class Projects {
 
         let obj = {
           name: pkg.name,
+          version: pkg.version,
           description: pkg.description,
           homepage: pkg.homepage,
           author: pkg.author, // email, name, url

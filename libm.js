@@ -34,6 +34,7 @@ util.asyncMap(deps, function(dep, callback) {
       console.log(colors.yellow(`${dep.name} >>> `) + colors.green(dep.description))
       if(dep.github) { console.log('GitHub: ' + colors.cyan(dep.github)) }
       if(dep.homepage) { console.log('Homepage: ' + colors.cyan(dep.homepage)) }
+      console.log('Version: ' + colors.green(dep.version))
       //if(dep.author) console.log('Author: ' + nameEmail(dep.author.name, dep.author.email))
       //console.log('Npm User: ' + nameEmail(dep.npmuser.name, dep.npmuser.email))
       console.log()
