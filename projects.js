@@ -100,15 +100,6 @@ class Projects {
     })), []).filter(dep => !dep.missing)
   }
 
-  // depInfo(dep, callback) {
-  //   npmjs.info(dep, (info) => {
-  //     github.repoInfo('visionmedia/superagent', (repo) => {
-  //       info.homepage = repo.homepage
-  //       callback(info)
-  //     })
-  //   })
-  // }
-
   showDep(dep) {
     console.log(colors.yellow(`${dep.name} >>> `) + colors.green(dep.description))
     if(dep.github) { console.log('GitHub: ' + colors.cyan(dep.github)) }
