@@ -1,13 +1,21 @@
 {
-  "name": "meta",
+  "name": "superlib",
   "version": "1.0.0",
-  "description": "",
+  "description": "Awesomest npm dependencies analysis tool",
   "main": "dependencies.js",
-  "scripts": {
-    "test": "ava"
-  },
-  "author": "",
+  "author": "davidhq",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidhq/superlib-node"
+  },
+  "bin": {
+    "lib": "lib.js",
+    "libm": "libm.js"
+  },
+  "engines": {
+    "node": ">=5.7.0"
+  },
   "dependencies": {
     "colors": "^1.1.2",
     "davidhq-util": "^1.0.1",
