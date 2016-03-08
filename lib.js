@@ -9,6 +9,10 @@ var projects = new Projects()
 let args = process.argv.slice(2)
 let dep = args[0]
 
+function highlightDeps(deps) {
+  return deps.map(d => dep && d.toLowerCase().indexOf(dep.toLowerCase()) > -1 ? colors.yellow.bold(d) : colors.yellow(d))
+}
+
 function showProject(project, dep) {
   if((dep && projects.hasDep(project, dep)) || !dep) {
 
@@ -20,11 +24,11 @@ function showProject(project, dep) {
     console.log(colors.cyan(`<${project.name}>`) + dir)
 
     if (project.dependencies) {
-      console.log(`Deps: ${colors.yellow(projects.depList(project).join(', '))}`)
+      console.log(`Deps: ${highlightDeps(projects.depList(project)).join(', ')}`)
 
       if(dep) {
         for(let match of projects.findDeps(project, dep)) {
-          console.log(colors.green(`https://www.npmjs.com/package/${match}`))
+          console.log(colors.yellow.bold(match) + ": " + colors.green(`https://www.npmjs.com/package/${match}`))
         }
       }
     }
