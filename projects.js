@@ -115,7 +115,7 @@ class Projects {
     if(dep.github) { console.log('GitHub: ' + colors.cyan(dep.github)) }
     if(dep.homepage) { console.log('Homepage: ' + colors.cyan(dep.homepage)) }
     console.log('Version: ' + colors.green(dep.version))
-    console.log('Projects: ' + colors.yellow(dep.projects.join(', ')))
+    if(dep.projects) { console.log('Projects: ' + colors.yellow(dep.projects.join(', '))) }
     //if(dep.author) console.log('Author: ' + nameEmail(dep.author.name, dep.author.email))
     //console.log('Npm User: ' + nameEmail(dep.npmuser.name, dep.npmuser.email))
     console.log()
