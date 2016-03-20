@@ -86,7 +86,7 @@ class Projects {
   // scans all the dependencies for the project and reads the package.json of each one
   depsWithInfo(project) {
     return this.depList(project).map(function(dep) {
-      return this.depInfo(project.path, dep)
+      return Object.assign(this.depInfo(project.path, dep), { project: project.name })
     }, this)
   }
 
@@ -94,10 +94,20 @@ class Projects {
   // if some project doesn't have node_modules currently but another one has, then dependency info is still gathered from where it can be
   // each dependency has to be present only once across all scanned projects
   depsWithInfoPath(path) {
-    return this.scan(path).reduce((deps, project) => deps.concat(this.depsWithInfo(project).filter(dep => {
+    let depProjects = {}
+
+    let list = this.scan(path).reduce((deps, project) => deps.concat(this.depsWithInfo(project).filter(dep => {
+      if(!depProjects[dep.name]) {
+        depProjects[dep.name] = []
+      }
+      depProjects[dep.name] = depProjects[dep.name].concat(dep.project)
       let match = deps.find(d => d.name == dep.name)
       return !match || match.missing
-    })), []).filter(dep => !dep.missing)
+    })), [])
+
+    // remove missing but only if they are not the only occurence
+    let condition = (dep) => dep.missing && list.filter(d => d.name == dep.name && !d.missing).length > 0
+    return list.filter(dep => !condition(dep)).map(dep => Object.assign(dep, { projects: depProjects[dep.name].sort() }))
   }
 
   showDep(dep) {
@@ -105,6 +115,7 @@ class Projects {
     if(dep.github) { console.log('GitHub: ' + colors.cyan(dep.github)) }
     if(dep.homepage) { console.log('Homepage: ' + colors.cyan(dep.homepage)) }
     console.log('Version: ' + colors.green(dep.version))
+    console.log('Projects: ' + colors.yellow(dep.projects.join(', ')))
     //if(dep.author) console.log('Author: ' + nameEmail(dep.author.name, dep.author.email))
     //console.log('Npm User: ' + nameEmail(dep.npmuser.name, dep.npmuser.email))
     console.log()

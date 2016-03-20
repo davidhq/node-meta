@@ -25,7 +25,7 @@ deps = util.arraySortByKey(deps, 'name')
 
 util.asyncMap(deps, function(dep, callback) {
   if(dep.missing) {
-    npmjs.info(dep.name, callback)
+    npmjs.info(dep.name, (info) => callback(Object.assign(info, { projects: dep.projects })))
   } else {
     callback(dep)
   }
