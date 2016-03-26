@@ -3,9 +3,8 @@ var util = require('davidhq-util').util
 var Xray = require('x-ray')
 var x = Xray()
 
-class NpmJs {
-
-  info(pkg, callback) {
+module.exports = {
+  info: (pkg, callback) => {
     let url = `https://www.npmjs.com/package/${pkg}`
     x(url, {
       description: '.package-description',
@@ -21,5 +20,3 @@ class NpmJs {
     })
   }
 }
-
-module.exports = NpmJs

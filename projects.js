@@ -29,7 +29,8 @@ class Projects {
         folder: pth.basename(path),
         version: pkg.version,
         path: path,
-        dependencies: pkg.dependencies
+        dependencies: pkg.dependencies,
+        bin: pkg.bin
       }
     }
   }

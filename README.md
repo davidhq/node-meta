@@ -10,6 +10,13 @@
 
     Node 5.7.0+
 
+## Help
+
+```bash
+lib --help
+libm --help
+```
+
 ## Usage
 
 Go to npm project or a folder with many npm project subdirectories and run one of these commands:
@@ -18,6 +25,11 @@ Go to npm project or a folder with many npm project subdirectories and run one o
     lib [dep]
     libm
     libm [dep]
+
+or
+
+    lib --path /Path/To/Project
+    libm --path /Path/To/Project
 
 ## Tips
 

@@ -1,40 +1,50 @@
 #!/usr/bin/env node
 "use strict"
-var colors = require('colors')
-var fs = require('fs')
-var util = require('davidhq-util').util
+var colors = require('colors');
+var fs = require('fs');
+var util = require('davidhq-util').util;
+var path = require("path");
 
-var NpmJs = require("./providers/npmjs")
-let npmjs = new NpmJs()
+var npmjs = require("./providers/npmjs");
 
-var Projects = require('./projects')
-var projects = new Projects()
+var Projects = require('./projects');
+var projects = new Projects();
+
+// Parse command line options
+var program = require('commander');
+
+var pkg = require(path.join(__dirname, 'package.json'));
+
+program
+  .version(pkg.version)
+  .description("Awesomest npm dependencies analysis tool")
+  .option('-p, --path <path>', 'Project(s) on which to run the command')
+  .parse(process.argv);
 
 function nameEmail(name, email) {
-  return email ? `${name} <${email}>` : name
+  return email ? `${name} <${email}>` : name;
 }
 
-let args = process.argv.slice(2)
-let filter = args[0]
+let filter = program.args[0];
 
-let path = process.cwd()
-let project = projects.info(path)
+let projecPath = program.path || process.cwd();
+let project = projects.info(projecPath);
 
-let deps = project ? projects.depsWithInfo(project) : projects.depsWithInfoPath(path)
-deps = util.arraySortByKey(deps, 'name')
+let deps = project ? projects.depsWithInfo(project) : projects.depsWithInfoPath(projecPath);
+deps = util.arraySortByKey(deps, 'name');
 
 util.asyncMap(deps, function(dep, callback) {
   if(dep.missing) {
-    npmjs.info(dep.name, (info) => callback(Object.assign(info, { projects: dep.projects })))
+    npmjs.info(dep.name, (info) => callback(Object.assign(info, { projects: dep.projects })));
   } else {
-    callback(dep)
+    callback(dep);
   }
 }).then(deps => {
   for(let dep of deps) {
     if(!filter || (filter && util.cointainsStringInsensitive(dep.name, filter))) {
-      projects.showDep(dep)
+      projects.showDep(dep);
     }
   }
 }).catch(error => {
-  console.log(error)
+  console.log(error);
 })
