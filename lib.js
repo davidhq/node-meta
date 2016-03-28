@@ -36,7 +36,8 @@ function showProject(project, dep) {
     console.log(colors.cyan(`[ ${project.name} ]`) + dir);
 
     if(project.dependencies) {
-      console.log(`Deps: ${highlightDeps(projects.depList(project)).join(', ')}`);
+      let  deps= projects.depList(project);
+      console.log(`Deps (${deps.length}): ${highlightDeps(deps).join(', ')}`);
 
       if(dep) {
         for(let match of projects.findDeps(project, dep)) {
