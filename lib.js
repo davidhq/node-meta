@@ -33,7 +33,7 @@ function showProject(project, dep) {
       dir = ` (directory: ${project.folder})`;
     }
 
-    console.log(colors.cyan(`<${project.name}>`) + dir);
+    console.log(colors.cyan(`[ ${project.name} ]`) + dir);
 
     if(project.dependencies) {
       console.log(`Deps: ${highlightDeps(projects.depList(project)).join(', ')}`);
