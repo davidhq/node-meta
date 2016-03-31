@@ -1,13 +1,13 @@
 {
   "name": "superlib",
-  "version": "1.0.6",
-  "description": "Awesomest npm dependencies analysis tool",
-  "main": "dependencies.js",
+  "version": "1.0.8",
+  "description": "Awesomest npm/elm dependencies analysis tool",
+  "main": "index.js",
   "author": "davidhq",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/davidhq/superlib-node"
+    "url": "https://github.com/davidhq/superlib"
   },
   "bin": {
     "lib": "lib.js",

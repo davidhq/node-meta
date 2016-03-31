@@ -1,4 +1,4 @@
-# superlib node package
+# Simple dependency analysis tool for Node and Elm
 
 [NpmJs](https://www.npmjs.com/package/superlib)
 
@@ -19,7 +19,7 @@ libm --help
 
 ## Usage
 
-Go to npm project or a folder with many npm project subdirectories and run one of these commands:
+Go to npm/elm project or a folder with many npm project subdirectories and run one of these commands:
 
     lib
     lib [dep]
@@ -34,3 +34,13 @@ or
 ## Tips
 
 If you use `iTerm2 v3.0`, you can click on the links in terminal with `CMD+click`.
+
+## Screenshots
+
+    lib
+
+![](http://cl.ly/3n3Q3W0c2i10/Screen%20Shot%202016-03-31%20at%2023.47.51.png)
+
+    libm
+
+![](http://cl.ly/3k352J3O1m2D/Screen%20Shot%202016-03-31%20at%2023.48.20.png)
