@@ -1,6 +1,6 @@
 {
   "name": "superlib",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "Awesomest npm/elm dependencies analysis tool",
   "main": "index.js",
   "author": "davidhq",
