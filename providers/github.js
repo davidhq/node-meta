@@ -1,4 +1,3 @@
-'use strict';
 let Connection = require('./lib/connection');
 
 class GitHub {

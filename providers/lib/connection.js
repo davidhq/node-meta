@@ -1,4 +1,3 @@
-'use strict';
 var request = require('superagent');
 
 class Connection {

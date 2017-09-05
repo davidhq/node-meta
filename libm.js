@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-'use strict';
 var colors = require('colors');
 var fs = require('fs');
-var util = require('davidhq-util').util;
+var util = require('./utilities');
 var path = require('path');
 
 var npmjs = require('./providers/npmjs');

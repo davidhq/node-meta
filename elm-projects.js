@@ -1,4 +1,3 @@
-'use strict';
 var fs = require('fs');
 var pth = require('path');
 var util = require('davidhq-util').util;

@@ -1,10 +1,9 @@
-'use strict';
 var test = require('tape');
 
 test('github parsing repo from url', function(t) {
   t.plan(4);
 
-  var GitHub = require('./providers/github');
+  var GitHub = require('../providers/github');
   let github = new GitHub();
 
   t.equal(github.repoName('https://github.com/davidhq/cryptonite'), 'davidhq/cryptonite');
