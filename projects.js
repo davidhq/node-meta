@@ -9,7 +9,10 @@ let github = new GitHub();
 
 class Projects {
   scan(path) {
-    return util.scanDirSync(path).filter(dir => this.valid(dir)).map(dir => this.info(dir));
+    return util
+      .scanDirSync(path)
+      .filter(dir => this.valid(dir))
+      .map(dir => this.info(dir));
   }
 
   valid(path) {
@@ -59,8 +62,13 @@ class Projects {
       };
 
       if (pkg['repository']) {
-        let repo = github.repoName(pkg['repository']['url']);
-        obj.github = `https://github.com/${repo}`;
+        if (pkg['repository']['url']) {
+          let repo = github.repoName(pkg['repository']['url']);
+          obj.github = `https://github.com/${repo}`;
+        } else {
+          // "repository": "expressjs/express"
+          obj.github = `https://github.com/${pkg['repository']}`;
+        }
       } else {
         obj.github = '<missing>';
       }
