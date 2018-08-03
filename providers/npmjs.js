@@ -1,4 +1,4 @@
-var util = require('davidhq-util').util;
+var util = require('../utilities');
 var Xray = require('x-ray');
 var x = Xray();
 

@@ -1,6 +1,6 @@
 var fs = require('fs');
 var pth = require('path');
-var util = require('davidhq-util').util;
+var util = require('./utilities');
 var colors = require('colors');
 
 class ElmProjects {
